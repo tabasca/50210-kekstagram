@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Екатерина Иванюта](https://up.htmlacademy.ru/javascript/4/user/50210).
-* Наставник: `Неизвестно`.
+* Наставник: [Иван Гунченко](https://up.htmlacademy.ru/javascript/4/user/3623).
 
 ---
 
