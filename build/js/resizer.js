@@ -127,6 +127,48 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      //left rect
+      this._ctx.fillRect(
+        0,
+        0,
+        (this._container.width - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 2,
+        this._container.height);
+
+      //right rect
+      this._ctx.fillRect(
+        this._container.width - (this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth)) / 2,
+        0,
+        this._container.width - (this._resizeConstraint.side - this._ctx.lineWidth / 2) / 2,
+        this._container.height);
+
+      //top rect
+      this._ctx.fillRect(
+        (this._container.width - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 2,
+        0,
+        (this._resizeConstraint.side + this._ctx.lineWidth / 2),
+        (this._container.height - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 2);
+
+      //bottom rect
+      this._ctx.fillRect(
+        (this._container.width - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 2,
+        this._container.height - (this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2,
+        this._resizeConstraint.side + this._ctx.lineWidth / 2,
+        (this._container.height - (this._resizeConstraint.side - this._ctx.lineWidth / 2)) / 2);
+
+
+      //size of the cropped image
+      this._ctx.fillStyle = 'white';
+      // this._ctx.textBaseline= 'hanging';
+      var sizeOfCroppedImage = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
+      this._ctx.fillText(
+        sizeOfCroppedImage,
+        this._container.width / 2 - this._ctx.measureText(sizeOfCroppedImage).width / 2,
+        (this._container.height - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 3
+      );
+
     },
 
     /**
