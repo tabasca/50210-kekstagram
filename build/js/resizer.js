@@ -102,26 +102,12 @@
       // Подробней см. строку 132.
       this._ctx.save();
 
-      // for (var i = 0; i < this._container.width; i++) {
-      //   for (var j = 0; j < this._container.height; j++) {
-      //     this._ctx.beginPath();
-      //     var x = 0;
-      //     var y = 0;
-      //     var radius = 20;
-      //     var startAngle = 0;
-      //     var endAngle = 180;
-      //
-      //     this._ctx.arc(x, y, radius, startAngle, endAngle);
-      //
-      //     this._ctx.fillStyle = '#ffe753';
-      //   }
-      // }
-
       // Установка начальной точки системы координат в центр холста.
       this._ctx.translate(this._container.width / 2, this._container.height / 2);
 
       var displX = -(this._resizeConstraint.x + this._resizeConstraint.side / 2);
       var displY = -(this._resizeConstraint.y + this._resizeConstraint.side / 2);
+
       // Отрисовка изображения на холсте. Параметры задают изображение, которое
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
@@ -136,7 +122,6 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
       //black 0.8 overlay
-
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 
       this._ctx.beginPath();
@@ -155,7 +140,6 @@
       // 0 0 находится в левом верхнем углу холста, в противном случае
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
-
       this._ctx.restore();
 
       //size of the cropped image
