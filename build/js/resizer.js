@@ -154,45 +154,45 @@
       this._ctx.fillStyle = '#ffe753';
       var lengthLine = this._resizeConstraint.side - 6;
 
-     // Top border
-     var xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 6;
-     var yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 3;
+       // Top border
+      var xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 6;
+      var yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 3;
 
-     this._ctx.beginPath();
-     for (var i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
-       this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
-       this._ctx.fill();
-     };
+      this._ctx.beginPath();
+      for (var i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-     //bottom border
-     xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
-     yCoordinateForBorder = this._container.height - (this._container.height - this._resizeConstraint.side) / 2 - 5;
+      //bottom border
+      xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
+      yCoordinateForBorder = this._container.height - (this._container.height - this._resizeConstraint.side) / 2 - 5;
 
-     this._ctx.beginPath();
-     for (i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
-       this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
-       this._ctx.fill();
-     };
+      this._ctx.beginPath();
+      for (i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-     //right border
-     xCoordinateForBorder = this._container.width - (this._container.width - this._resizeConstraint.side) / 2 - 5;
-     yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
+      //right border
+      xCoordinateForBorder = this._container.width - (this._container.width - this._resizeConstraint.side) / 2 - 5;
+      yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
 
-     this._ctx.beginPath();
-     for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12 ) {
-       this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
-       this._ctx.fill();
-     };
+      this._ctx.beginPath();
+      for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-     //left border
-     xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
-     yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
+      //left border
+      xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
+      yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
 
-     this._ctx.beginPath();
-     for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12) {
-       this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
-       this._ctx.fill();
-     };
+      this._ctx.beginPath();
+      for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12) {
+        this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
     },
 
