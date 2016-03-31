@@ -89,14 +89,14 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
+      // this._ctx.lineWidth = 6;
+      // // Цвет обводки.
+      // this._ctx.strokeStyle = '#ffe753';
+      // // Размер штрихов. Первый элемент массива задает длину штриха, второй
+      // // расстояние между соседними штрихами.
+      // this._ctx.setLineDash([15, 10]);
+      // // Смещение первого штриха от начала линии.
+      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       // Подробней см. строку 132.
@@ -107,6 +107,7 @@
 
       var displX = -(this._resizeConstraint.x + this._resizeConstraint.side / 2);
       var displY = -(this._resizeConstraint.y + this._resizeConstraint.side / 2);
+
       // Отрисовка изображения на холсте. Параметры задают изображение, которое
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
@@ -120,6 +121,19 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      //black 0.8 overlay
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      this._ctx.beginPath();
+      this._ctx.rect(displX, displY, this._container.width, this._container.height);
+      this._ctx.rect(
+         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+         -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+         -this._resizeConstraint.side - this._ctx.lineWidth / 2,
+         this._resizeConstraint.side + this._ctx.lineWidth / 2
+       );
+      this._ctx.fill();
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
@@ -127,6 +141,59 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+
+      //size of the cropped image
+      this._ctx.fillStyle = 'white';
+      var sizeOfCroppedImage = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
+      this._ctx.fillText(
+        sizeOfCroppedImage,
+        this._container.width / 2 - this._ctx.measureText(sizeOfCroppedImage).width / 2,
+        (this._container.height - (this._resizeConstraint.side + this._ctx.lineWidth * 2)) / 2.5);
+
+      // dotted border
+      this._ctx.fillStyle = '#ffe753';
+      var lengthLine = this._resizeConstraint.side - 6;
+
+       // Top border
+      var xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 6;
+      var yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 3;
+
+      this._ctx.beginPath();
+      for (var i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+      //bottom border
+      xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
+      yCoordinateForBorder = this._container.height - (this._container.height - this._resizeConstraint.side) / 2 - 5;
+
+      this._ctx.beginPath();
+      for (i = xCoordinateForBorder; i <= xCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(i, yCoordinateForBorder, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+      //right border
+      xCoordinateForBorder = this._container.width - (this._container.width - this._resizeConstraint.side) / 2 - 5;
+      yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
+
+      this._ctx.beginPath();
+      for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12 ) {
+        this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+      //left border
+      xCoordinateForBorder = (this._container.width - this._resizeConstraint.side) / 2 + 3;
+      yCoordinateForBorder = (this._container.height - this._resizeConstraint.side) / 2 + 6;
+
+      this._ctx.beginPath();
+      for (i = yCoordinateForBorder; i <= yCoordinateForBorder + lengthLine; i += 12) {
+        this._ctx.arc(xCoordinateForBorder, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
     },
 
     /**
