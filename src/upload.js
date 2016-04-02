@@ -1,5 +1,4 @@
 /* global Resizer: true */
-
 /**
  * @fileoverview
  * @author Igor Alexeenko (o0)
@@ -88,7 +87,6 @@
   topCoordinate.min = 0;
   side.min = 0;
 
-
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
@@ -112,10 +110,22 @@
    */
   var filterForm = document.forms['upload-filter'];
 
+  var browserCookies = require('../node_modules/browser-cookies/src/browser-cookies');
+
+  var defaultFilter = browserCookies.get('filterType');
+
+  filterMap = {
+    'none': 'filter-none',
+    'chrome': 'filter-chrome',
+    'sepia': 'filter-sepia'
+  };
+
   /**
    * @type {HTMLImageElement}
    */
   var filterImage = filterForm.querySelector('.filter-image-preview');
+
+  filterImage.className = 'filter-image-preview ' + filterMap[defaultFilter];
 
   /**
    * @type {HTMLElement}
@@ -210,6 +220,13 @@
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
+
+  resizeForm.onchange = function(evt) {
+    evt.preventDefault();
+
+    resizeFormIsValid();
+  };
+
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
@@ -245,6 +262,27 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
+
+    var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
+      return item.checked;
+    })[0].value;;
+
+    var today = new Date();
+    var myBirthday = new Date();
+    myBirthday.setMonth(7, 23);
+
+    if (myBirthday.getMonth() < today.getMonth() && myBirthday.getDate() < today.getDate()) {
+      myBirthday.setFullYear(today.getFullYear())
+    } else {
+      myBirthday.setFullYear(today.getFullYear() - 1);
+    }
+
+    var dateToExpire = (today - myBirthday) / 1000 / 60 / 60 / 24;
+
+    browserCookies.set('filterType', selectedFilter, {expires: dateToExpire
+    });
+
+    filterForm.submit();
   };
 
   /**
