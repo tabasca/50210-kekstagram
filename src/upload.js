@@ -97,12 +97,10 @@
     if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
-    }
-    else if ((leftCoordinate.value + side.value) > currentResizer._image.naturalWidth || (topCoordinate.value + side.value) > currentResizer._image.naturalHeight) {
+    } else if ((leftCoordinate.value + side.value) > currentResizer._image.naturalWidth || (topCoordinate.value + side.value) > currentResizer._image.naturalHeight) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
-    }
-    else {
+    } else {
       uploadBtn.removeAttribute('disabled');
       return true;
     }
