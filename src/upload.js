@@ -265,21 +265,22 @@
 
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
       return item.checked;
-    })[0].value;;
+    })[0].value;
 
     var today = new Date();
     var myBirthday = new Date();
     myBirthday.setMonth(7, 23);
 
     if (myBirthday.getMonth() < today.getMonth() && myBirthday.getDate() < today.getDate()) {
-      myBirthday.setFullYear(today.getFullYear())
+      myBirthday.setFullYear(today.getFullYear());
     } else {
       myBirthday.setFullYear(today.getFullYear() - 1);
     }
 
-    var dateToExpire = (today - myBirthday) / 1000 / 60 / 60 / 24;
+    var dateToExpire = Date.now() + (today - myBirthday);
+    var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('filterType', selectedFilter, {expires: dateToExpire
+    browserCookies.set('filterType', selectedFilter, {expires: formattedDateToExpire
     });
 
     filterForm.submit();
