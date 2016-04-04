@@ -94,7 +94,10 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
+    if (leftCoordinate.value.length === 0 || topCoordinate.value.length === 0 || side.value.length === 0) {
+      uploadBtn.removeAttribute('disabled');
+      return true;
+    } else if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
     } else if ((leftCoordinate.value + side.value) > currentResizer._image.naturalWidth || (topCoordinate.value + side.value) > currentResizer._image.naturalHeight) {
