@@ -68,14 +68,6 @@
   }
 
   /**
-   * Проверяет, валидны ли данные, в форме кадрирования.
-   * @return {boolean}
-   */
-  function resizeFormIsValid() {
-    return true;
-  }
-
-  /**
    * Форма загрузки изображения.
    * @type {HTMLFormElement}
    */
@@ -86,6 +78,36 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+
+  var leftCoordinate = document.querySelector('#resize-x');
+  var topCoordinate = document.querySelector('#resize-y');
+  var side = document.querySelector('#resize-size');
+  var uploadBtn = document.querySelector('#resize-fwd');
+
+  leftCoordinate.min = 0;
+  topCoordinate.min = 0;
+  side.min = 0;
+
+
+  /**
+   * Проверяет, валидны ли данные, в форме кадрирования.
+   * @return {boolean}
+   */
+  function resizeFormIsValid() {
+    if (leftCoordinate.value.length === 0 || topCoordinate.value.length === 0 || side.value.length === 0) {
+      uploadBtn.removeAttribute('disabled');
+      return true;
+    } else if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
+      uploadBtn.setAttribute('disabled', 'disabled');
+      return false;
+    } else if ((leftCoordinate.value + side.value) > currentResizer._image.naturalWidth || (topCoordinate.value + side.value) > currentResizer._image.naturalHeight) {
+      uploadBtn.setAttribute('disabled', 'disabled');
+      return false;
+    } else {
+      uploadBtn.removeAttribute('disabled');
+      return true;
+    }
+  }
 
   /**
    * Форма добавления фильтра.
