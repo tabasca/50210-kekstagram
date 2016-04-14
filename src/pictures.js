@@ -56,16 +56,16 @@
   filtersForm.classList.remove('hidden');
 
 
-  var renderPictures = function(pictures) {
+  var renderPictures = function(pics) {
     picturesContainer.innerHTML = '';
 
-    pictures.forEach(function(picture) {
-      getPictureElement(picture, picturesContainer);
+    pics.forEach(function(pic) {
+      getPictureElement(pic, picturesContainer);
     });
   };
 
-  var getFilteredPictures = function(pictures, filter) {
-    var picturesToFilter = pictures.slice(0);
+  var getFilteredPictures = function(pics, filter) {
+    var picturesToFilter = pics.slice(0);
 
     switch (filter) {
       case Filter.DATE:
