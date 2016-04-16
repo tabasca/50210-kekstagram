@@ -1,23 +1,27 @@
 'use strict';
 
 (function() {
-  var picturesContainer = document.querySelector('.pictures');
-  var templateElement = document.querySelector('#picture-template');
-  var filtersForm = document.querySelector('.filters');
 
+  // переменные
+  var picturesContainer = document.querySelector('.pictures');
+
+  var templateElement = document.querySelector('#picture-template');
+
+  var filtersForm = document.querySelector('.filters');
   filtersForm.classList.add('hidden');
 
   var elementToClone;
-
   if ('content' in templateElement) {
     elementToClone = templateElement.content.querySelector('.picture');
   } else {
     elementToClone = templateElement.querySelector('.picture');
   }
 
-  var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
+  var currentPage = 0;
 
-  var pictures = [];
+  var pictures = []; //исходные данные
+
+  var filteredPictures = []; //отфильтрованные данные
 
   var Filter = {
     'All': 'filter-popular',
@@ -25,10 +29,16 @@
     'COMMENTS': 'filter-discussed'
   };
 
+  // константы
+  var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
+
+  var PAGE_SIZE = 12;
+
   var DEFAULT_FILTER = Filter.ALL;
 
   var ACTIVE_FILTER_CLASSNAME = 'filter-active';
 
+  // создаем html-разметку и располагаем в ней полученные от сервера данные
   var getPictureElement = function(data, container) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.picture-comments').textContent = data.comments;
@@ -53,17 +63,22 @@
     return element;
   };
 
-  filtersForm.classList.remove('hidden');
 
+  // ф-я отрисовки картинок по страницам
+  var renderPictures = function(pics, page, replace) {
+    if (replace) {
+      picturesContainer.innerHTML = '';
+    }
 
-  var renderPictures = function(pics) {
-    picturesContainer.innerHTML = '';
+    var from = page * PAGE_SIZE;
+    var to = from + PAGE_SIZE;
 
-    pics.forEach(function(pic) {
+    pics.slice(from, to).forEach(function(pic) {
       getPictureElement(pic, picturesContainer);
     });
   };
 
+  // ф-я фильтрации картинок
   var getFilteredPictures = function(pics, filter) {
     var picturesToFilter = pics.slice(0);
 
@@ -93,9 +108,11 @@
     return picturesToFilter;
   };
 
+  // ф-я отрисовки отфильтрованных картинок по страницам
   var setFilterEnabled = function(filter) {
-    var filteredPictures = getFilteredPictures(pictures, filter);
-    renderPictures(filteredPictures);
+    filteredPictures = getFilteredPictures(pictures, filter);
+    currentPage = 0;
+    renderPictures(filteredPictures, currentPage, true);
 
     var activeFilter = filtersForm.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
     if (activeFilter) {
@@ -105,15 +122,22 @@
     filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
   };
 
-  var setFiltersEnabled = function(enabled) {
-    var filters = filtersForm.querySelectorAll('.filters-item');
-    for (var i = 0; i < filters.length; i++) {
-      filters[i].onclick = enabled ? function() {
-        setFilterEnabled(this.previousElementSibling.id);
-      } : null;
-    }
+  // ф-я активации фильтрации по нажатию на выбранный фильтр
+  var setFiltersEnabled = function() {
+    filtersForm.addEventListener('click', function(evt) {
+      if (evt.target.name === 'filter') {
+        setFilterEnabled(evt.target.id);
+      }
+    });
+    filtersForm.addEventListener('keydown', function(evt) {
+      if (evt.target.name === 'filter' && [13, 32].indexOf(evt.keyCode) > -1) {
+        evt.preventDefault();
+        setFilterEnabled(evt.target.id);
+      }
+    });
   };
 
+  // ф-я получения картинок с сервера (ajax)
   var getPictures = function(callback) {
     var xhr = new XMLHttpRequest();
 
@@ -138,10 +162,42 @@
     };
   };
 
+  // ф-я проверки на валидность для setScrollEnabled
+  var isBottomReached = function() {
+    var bottomPosition = picturesContainer.getBoundingClientRect();
+    return bottomPosition.top <= 0;
+  };
+
+  // ф-я проверки на валидность для setScrollEnabled
+  var isNextPageAvailable = function(pics, page, pageSize) {
+    return page < Math.floor(pics.length / pageSize);
+  };
+
+  // ф-я отрисовки картинок при скролле страницы при условии валидации по ф-ям isBottomReached() и isNextPageAvailable()
+  var setScrollEnabled = function() {
+    window.addEventListener('scroll', function() {
+      setTimeout(function() {
+        if (isBottomReached() && isNextPageAvailable(pictures, currentPage, PAGE_SIZE)) {
+          currentPage++;
+          renderPictures(filteredPictures, currentPage);
+        }
+      }, 100);
+    });
+  };
+
+
+  // вызываем отрисовку загруженных картинок
   getPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    setFiltersEnabled(true);
+    setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
   });
+
+  setScrollEnabled();
+
+
+
+  filtersForm.classList.remove('hidden');
+
 
 }());
