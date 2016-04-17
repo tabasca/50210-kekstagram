@@ -29,6 +29,12 @@
     'COMMENTS': 'filter-discussed'
   };
 
+  var picturesPosition = picturesContainer.getBoundingClientRect();
+
+  var elementAtTheBottom = document.querySelector('body');
+
+  var elementAtTheBottomPosition = picturesContainer.getBoundingClientRect();
+
   // константы
   var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
 
@@ -69,13 +75,14 @@
     if (replace) {
       picturesContainer.innerHTML = '';
     }
-
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
 
     pics.slice(from, to).forEach(function(pic) {
       getPictureElement(pic, picturesContainer);
     });
+
+    renderNextPages();
   };
 
   // ф-я фильтрации картинок
@@ -164,8 +171,18 @@
 
   // ф-я проверки на валидность для setScrollEnabled
   var isBottomReached = function() {
-    var bottomPosition = picturesContainer.getBoundingClientRect();
-    return bottomPosition.top <= 0;
+    return elementAtTheBottomPosition.top - picturesPosition.top === 0;
+  };
+
+  var isNextPageNeeded = function() {
+    return elementAtTheBottomPosition.clientHeight - picturesPosition.clientHeight > 0;
+  };
+
+  var renderNextPages = function() {
+    while (isNextPageNeeded() && isNextPageAvailable(pictures, currentPage, PAGE_SIZE)) {
+      currentPage++;
+      renderPictures(filteredPictures, currentPage);
+    }
   };
 
   // ф-я проверки на валидность для setScrollEnabled
@@ -195,6 +212,8 @@
     setFilterEnabled(DEFAULT_FILTER);
     setScrollEnabled();
   });
+
+
 
   filtersForm.classList.remove('hidden');
 
