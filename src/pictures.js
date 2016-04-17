@@ -33,7 +33,7 @@
 
   var elementAtTheBottom = document.querySelector('body');
 
-  var elementAtTheBottomPosition = picturesContainer.getBoundingClientRect();
+  var elementAtTheBottomPosition = elementAtTheBottom.getBoundingClientRect();
 
   // константы
   var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
@@ -171,11 +171,11 @@
 
   // ф-я проверки на валидность для setScrollEnabled
   var isBottomReached = function() {
-    return elementAtTheBottomPosition.top - picturesPosition.top === 0;
+    return elementAtTheBottomPosition.top - picturesPosition.top <= 0;
   };
 
   var isNextPageNeeded = function() {
-    return elementAtTheBottomPosition.clientHeight - picturesPosition.clientHeight > 0;
+    return elementAtTheBottom.clientHeight - picturesContainer.clientHeight - 60 > 0;
   };
 
   var renderNextPages = function() {
