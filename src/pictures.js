@@ -24,7 +24,7 @@
   var filteredPictures = []; //отфильтрованные данные
 
   var Filter = {
-    'All': 'filter-popular',
+    'ALL': 'filter-popular',
     'DATE': 'filter-new',
     'COMMENTS': 'filter-discussed'
   };
@@ -175,8 +175,10 @@
 
   // ф-я отрисовки картинок при скролле страницы при условии валидации по ф-ям isBottomReached() и isNextPageAvailable()
   var setScrollEnabled = function() {
+    var scrollTimeout;
     window.addEventListener('scroll', function() {
-      setTimeout(function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
         if (isBottomReached() && isNextPageAvailable(pictures, currentPage, PAGE_SIZE)) {
           currentPage++;
           renderPictures(filteredPictures, currentPage);
@@ -191,11 +193,8 @@
     pictures = loadedPictures;
     setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
+    setScrollEnabled();
   });
-
-  setScrollEnabled();
-
-
 
   filtersForm.classList.remove('hidden');
 
