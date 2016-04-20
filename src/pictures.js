@@ -100,20 +100,16 @@
             return false;
           }
         });
-        console.log('filter', picturesToFilter);
-        console.log('filtered pics', picturesFilteredByTwoWeeks);
         picturesFilteredByTwoWeeks.sort(function(a, b) {
           var dateOne = +new Date(a.date);
           var dateTwo = +new Date(b.date);
           return dateTwo - dateOne;
         });
         return picturesFilteredByTwoWeeks;
-        break;
       case Filter.COMMENTS:
         picturesToFilter.sort(function(a, b) {
           return b.comments - a.comments;
         });
-        return picturesToFilter;
         break;
     }
     return picturesToFilter;
