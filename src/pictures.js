@@ -91,7 +91,7 @@
 
     switch (filter) {
       case Filter.DATE:
-        picturesToFilter.filter(function(pic) {
+        var picturesFilteredByTwoWeeks = picturesToFilter.filter(function(pic) {
           var twoWeeksAgo = +new Date() - 14 * 24 * 60 * 60 * 1000;
           var picDate = +new Date(pic.date);
           if (picDate >= twoWeeksAgo) {
@@ -100,16 +100,20 @@
             return false;
           }
         });
-        picturesToFilter.sort(function(a, b) {
+        console.log('filter', picturesToFilter);
+        console.log('filtered pics', picturesFilteredByTwoWeeks);
+        picturesFilteredByTwoWeeks.sort(function(a, b) {
           var dateOne = +new Date(a.date);
           var dateTwo = +new Date(b.date);
           return dateTwo - dateOne;
         });
+        return picturesFilteredByTwoWeeks;
         break;
       case Filter.COMMENTS:
         picturesToFilter.sort(function(a, b) {
           return b.comments - a.comments;
         });
+        return picturesToFilter;
         break;
     }
     return picturesToFilter;
