@@ -98,7 +98,7 @@
     } else if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
-    } else if ((+leftCoordinate.value + +side.value) > currentResizer._image.naturalWidth || (+topCoordinate.value + +side.value) > currentResizer._image.naturalHeight) {
+    } else if ((parseInt(leftCoordinate.value, 10) + parseInt(side.value, 10)) > currentResizer._image.naturalWidth || (parseInt(topCoordinate.value, 10) + parseInt(side.value, 10)) > currentResizer._image.naturalHeight) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
     } else {
@@ -317,7 +317,7 @@
 
   resizeForm.addEventListener('change', function() {
     if (resizeFormIsValid()) {
-      currentResizer.setConstraint(leftCoordinate.value, topCoordinate.value, side.value);
+      currentResizer.setConstraint(parseInt(leftCoordinate.value, 10), parseInt(topCoordinate.value, 10), parseInt(side.value, 10));
     }
   });
 
