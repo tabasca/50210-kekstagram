@@ -94,6 +94,7 @@
         var picturesFilteredByTwoWeeks = picturesToFilter.filter(function(pic) {
           var twoWeeksAgo = +new Date() - 14 * 24 * 60 * 60 * 1000;
           var picDate = +new Date(pic.date);
+          console.log(picDate);
           if (picDate >= twoWeeksAgo) {
             return pic;
           } else {
