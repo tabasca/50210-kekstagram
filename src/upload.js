@@ -1,19 +1,6 @@
-/* global Resizer: true */
-/**
- * @fileoverview
- * @author Igor Alexeenko (o0)
- */
-
 'use strict';
 
-(function() {
-  /** @enum {string} */
-  var FileType = {
-    'GIF': '',
-    'JPEG': '',
-    'PNG': '',
-    'SVG+XML': ''
-  };
+  var utils = require('./utils');
 
   /** @enum {number} */
   var Action = {
@@ -21,13 +8,6 @@
     UPLOADING: 1,
     CUSTOM: 2
   };
-
-  /**
-   * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
-   * из ключей FileType.
-   * @type {RegExp}
-   */
-  var fileRegExp = new RegExp('^image/(' + Object.keys(FileType).join('|').replace('\+', '\\+') + ')$', 'i');
 
   /**
    * @type {Object.<string, string>}
@@ -45,10 +25,7 @@
    * изображением.
    */
   function cleanupResizer() {
-    if (currentResizer) {
-      currentResizer.remove();
-      currentResizer = null;
-    }
+      utils.removeElement(currentResizer);
   }
 
   /**
@@ -88,7 +65,7 @@
   side.min = 0;
 
   /**
-   * Проверяет, валидны ли данные, в форме кадрирования.
+   * Проверяет, валидны ли данные в форме кадрирования.
    * @return {boolean}
    */
   function resizeFormIsValid() {
@@ -98,7 +75,7 @@
     } else if (leftCoordinate.value < leftCoordinate.min || topCoordinate.value < topCoordinate.min || side.value < side.min) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
-    } else if ((parseInt(leftCoordinate.value, 10) + parseInt(side.value, 10)) > currentResizer._image.naturalWidth || (parseInt(topCoordinate.value, 10) + parseInt(side.value, 10)) > currentResizer._image.naturalHeight) {
+  } else if ((parseInt(leftCoordinate.value) + parseInt(side.value)) > currentResizer._image.naturalWidth || (parseInt(topCoordinate.value) + parseInt(side.value)) > currentResizer._image.naturalHeight) {
       uploadBtn.setAttribute('disabled', 'disabled');
       return false;
     } else {
@@ -176,7 +153,7 @@
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
       // одного из форматов: JPEG, PNG, GIF или SVG.
-      if (fileRegExp.test(element.files[0].type)) {
+      if (utils.isFileTypeAppropriate(element)) {
         var fileReader = new FileReader();
 
         showMessage(Action.UPLOADING);
@@ -270,21 +247,7 @@
       return item.checked;
     })[0].value;
 
-    var today = new Date();
-    var myBirthday = new Date();
-    myBirthday.setMonth(7, 23);
-
-    if (myBirthday.getMonth() < today.getMonth() && myBirthday.getDate() < today.getDate()) {
-      myBirthday.setFullYear(today.getFullYear());
-    } else {
-      myBirthday.setFullYear(today.getFullYear() - 1);
-    }
-
-    var dateToExpire = Date.now() + (today - myBirthday);
-    var formattedDateToExpire = new Date(dateToExpire).toUTCString();
-
-    browserCookies.set('filterType', selectedFilter, {expires: formattedDateToExpire
-    });
+    browserCookies.set('filterType', selectedFilter, {expires: utils.calculateDateToExpire});
 
     filterForm.submit();
   });
@@ -317,7 +280,7 @@
 
   resizeForm.addEventListener('change', function() {
     if (resizeFormIsValid()) {
-      currentResizer.setConstraint(parseInt(leftCoordinate.value, 10), parseInt(topCoordinate.value, 10), parseInt(side.value, 10));
+      currentResizer.setConstraint(parseInt(leftCoordinate.value), parseInt(topCoordinate.value), parseInt(side.value));
     }
   });
 
@@ -330,4 +293,3 @@
 
   cleanupResizer();
   updateBackground();
-})();
