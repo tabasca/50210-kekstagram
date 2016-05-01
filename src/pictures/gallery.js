@@ -1,10 +1,8 @@
-'use strict'
-
-var utils = require('../utils');
+'use strict';
 
 var galleryContainer = document.querySelector('.gallery-overlay');
-var thumbnailsContainer = galleryContainer.querySelector('.gallery-overlay-preview');
-var closeGallery = galleryContainer.querySelector('.gallery-overlay-close');
+// var thumbnailsContainer = galleryContainer.querySelector('.gallery-overlay-preview');
+// var closeGallery = galleryContainer.querySelector('.gallery-overlay-close');
 var previewPicture = galleryContainer.querySelector('.gallery-overlay-image');
 
 var galleryPictures = [];
@@ -20,32 +18,32 @@ var showGallery = function(i) {
   showPicture(activePicture);
 };
 
-var _onPhotoClick = function() {
-  galleryContainer.addEventListener('click', function() {
-    activePicture++;
-    showPicture();
-  });
-};
+// var _onPhotoClick = function() {
+//   galleryContainer.addEventListener('click', function() {
+//     activePicture++;
+//     showPicture();
+//   });
+// };
 
-var _onDocumentKeydown = function() {
-  if (utils.isActivationEvent(evt)) {
-      if (evt.target.classList.contains('picture')) {
-          evt.preventDefault();
-          hideGallery();
-      }
-  }
-};
+// var _onDocumentKeydown = function() {
+//   if (utils.isActivationEvent(evt)) {
+//       if (evt.target.classList.contains('picture')) {
+//           evt.preventDefault();
+//           hideGallery();
+//       }
+//   }
+// };
 
-var showPicture = function(activePicture) {
-  var photo = galleryPictures[activePicture];
+var showPicture = function(currentPicture) {
+  var photo = galleryPictures[currentPicture];
   previewPicture.src = photo.url;
 };
 
-var hideGallery = function() {
-  galleryContainer.classList.add('invisible');
-};
+// var hideGallery = function() {
+//   galleryContainer.classList.add('invisible');
+// };
 
 module.exports = {
-  showGallery,
-  gallery
-}
+  showGallery: showGallery,
+  gallery: gallery
+};

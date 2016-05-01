@@ -46,18 +46,18 @@ var renderPictures = function(pics, page) {
 };
 
 var renderNextPages = function(reset) {
-    if (reset) {
-        currentPage = 0;
-        renderedPictures.forEach(function(picture) {
-            picture.remove();
-        });
+  if (reset) {
+    currentPage = 0;
+    renderedPictures.forEach(function(picture) {
+      picture.remove();
+    });
 
-        renderedPictures = [];
-    }
-    while (utils.isBottomReached(elementAtTheBottom) && utils.isNextPageAvailable(pictures.length, currentPage, PAGE_SIZE)) {
-      renderPictures(filteredPictures, currentPage);
-      currentPage++;
-    }
+    renderedPictures = [];
+  }
+  while (utils.isBottomReached(elementAtTheBottom) && utils.isNextPageAvailable(pictures.length, currentPage, PAGE_SIZE)) {
+    renderPictures(filteredPictures, currentPage);
+    currentPage++;
+  }
 };
 
 // ф-я отрисовки отфильтрованных картинок по страницам
