@@ -161,7 +161,7 @@ uploadForm.addEventListener('change', function(evt) {
       fileReader.addEventListener('load', function() {
         cleanupResizer();
 
-        currentResizer = new Resizer(fileReader.result);
+        currentResizer = new window.Resizer(fileReader.result);
         currentResizer.setElement(resizeForm);
         uploadMessage.classList.add('invisible');
 
