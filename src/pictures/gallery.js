@@ -2,77 +2,78 @@
 
 var utils = require('../utils');
 
-var galleryContainer = document.querySelector('.gallery-overlay');
-var closeGallery = galleryContainer.querySelector('.gallery-overlay-close');
-var previewPicture = galleryContainer.querySelector('.gallery-overlay-image');
-var galleryLikes = galleryContainer.querySelector('.likes-count');
-var galleryComments = galleryContainer.querySelector('.comments-count');
+var Gallery = function() {
+  var self = this;
 
-var galleryPictures = [];
-var activePicture = 0;
+  var galleryContainer = document.querySelector('.gallery-overlay');
+  var closeGallery = galleryContainer.querySelector('.gallery-overlay-close');
+  var previewPicture = galleryContainer.querySelector('.gallery-overlay-image');
+  var galleryLikes = galleryContainer.querySelector('.likes-count');
+  var galleryComments = galleryContainer.querySelector('.comments-count');
 
-var gallery = function(pictures) {
-  galleryPictures = pictures;
-};
+  var galleryPictures = [];
+  var activePicture = 0;
 
-var showGallery = function(i) {
-  activePicture = i;
-  galleryContainer.classList.remove('invisible');
-  showPicture(activePicture);
-};
+  this.gallery = function(pictures) {
+    galleryPictures = pictures;
+  };
 
-var _onPhotoClick = function() {
-  galleryContainer.addEventListener('click', function(evt) {
-    if (evt.target.classList.contains('gallery-overlay-image')) {
-      activePicture++;
-      showPicture();
-    } else {
-      evt.preventDefault();
-      hideGallery();
-    }
-  });
-};
+  this.showGallery = function(i) {
+    activePicture = i;
+    galleryContainer.classList.remove('invisible');
+    self.showPicture(activePicture);
 
-var _onCloseBtnClick = function(evt) {
-  if (evt.target.classList.contains('gallery-overlay-close')) {
-    closeGallery.addEventListener('click', function(evtt) {
-      evtt.preventDefault();
-      hideGallery();
+    window.addEventListener('keydown', this._onDocumentKeydown);
+    galleryContainer.addEventListener('click', this._onCloseBtnClick);
+    galleryContainer.addEventListener('click', this._onPhotoClick(activePicture));
+  };
+
+  this._onPhotoClick = function() {
+    galleryContainer.addEventListener('click', function(evt) {
+      if (evt.target.classList.contains('gallery-overlay-image')) {
+        activePicture++;
+        this.showPicture();
+      } else {
+        evt.preventDefault();
+        this.hideGallery();
+      }
     });
-  } else {
-    return;
-  }
+  };
+
+  this._onCloseBtnClick = function(evt) {
+    if (evt.target.classList.contains('gallery-overlay-close')) {
+      closeGallery.addEventListener('click', function(evtt) {
+        evtt.preventDefault();
+        this.hideGallery();
+      });
+    } else {
+      return;
+    }
+  };
+
+  this._onDocumentKeydown = function(e) {
+    if (utils.isEscEvent(e)) {
+      e.preventDefault();
+      this.hideGallery();
+    }
+  };
+
+  this.showPicture = function(currentPicture) {
+    currentPicture = activePicture;
+    var photo = galleryPictures[currentPicture];
+    if (photo) {
+      previewPicture.src = photo.url;
+      galleryLikes.innerHTML = photo.likes;
+      galleryComments.innerHTML = photo.comments;
+    }
+  };
+
+  this.hideGallery = function() {
+    galleryContainer.classList.add('invisible');
+
+    galleryContainer.removeEventListener('click', this._onCloseBtnClick);
+    galleryContainer.removeEventListener('click', this._onPhotoClick(activePicture));
+  };
 };
 
-var _onDocumentKeydown = function(e) {
-  if (utils.isEscEvent(e)) {
-    e.preventDefault();
-    hideGallery();
-  }
-};
-
-var showPicture = function(currentPicture) {
-  currentPicture = activePicture;
-  var photo = galleryPictures[currentPicture];
-  if (photo) {
-    previewPicture.src = photo.url;
-    galleryLikes.innerHTML = photo.likes;
-    galleryComments.innerHTML = photo.comments;
-  }
-};
-
-var hideGallery = function() {
-  galleryContainer.classList.add('invisible');
-
-  galleryContainer.removeEventListener('click', _onCloseBtnClick);
-  galleryContainer.removeEventListener('click', _onPhotoClick(activePicture));
-};
-
-window.addEventListener('keydown', _onDocumentKeydown);
-galleryContainer.addEventListener('click', _onCloseBtnClick);
-galleryContainer.addEventListener('click', _onPhotoClick(activePicture));
-
-module.exports = {
-  showGallery: showGallery,
-  gallery: gallery
-};
+module.exports = Gallery;
