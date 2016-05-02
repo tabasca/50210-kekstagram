@@ -3,8 +3,7 @@
 var filter = require('../filter/filter');
 var FilterType = require('../filter/filter-type');
 var utils = require('../utils');
-// var Picture = require('./picture');
-var getPictureElement = require('./get-picture-element');
+var Picture = require('./pic');
 var load = require('./load-pictures');
 var gallery = require('./gallery');
 
@@ -39,7 +38,7 @@ var renderPictures = function(pics, page) {
   var container = document.createDocumentFragment();
 
   pics.slice(from, to).forEach(function(pic) {
-    renderedPictures.push(getPictureElement(pic, container));
+    renderedPictures.push(new Picture(pic, container));
   });
 
   picturesContainer.appendChild(container);
@@ -48,8 +47,8 @@ var renderPictures = function(pics, page) {
 var renderNextPages = function(reset) {
   if (reset) {
     currentPage = 0;
-    renderedPictures.forEach(function(picture) {
-      picture.remove();
+    renderedPictures.forEach(function(pic) {
+      pic.remove();
     });
 
     renderedPictures = [];
@@ -65,6 +64,7 @@ var setFilterEnabled = function(filterType) {
   filteredPictures = filter(pictures, filterType);
   renderNextPages(true);
   gallery.gallery(filteredPictures);
+
 
   var activeFilter = filtersForm.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
   if (activeFilter) {
@@ -100,29 +100,12 @@ var setScrollEnabled = function() {
   });
 };
 
-var onPhotoClick = function() {
-  picturesContainer.addEventListener('click', function(evt) {
-    if (evt.target.src) {
-      var element = evt.target;
-      var elements = picturesContainer.querySelectorAll('img');
-      for (var i in elements) {
-        if (elements[i] === element) {
-          break;
-        }
-      }
-      gallery.showGallery(i);
-      evt.preventDefault();
-    }
-  });
-};
-
 load(PICTURES_LOAD_URL, picturesContainer, function(loadedPictures) {
   pictures = loadedPictures;
 
   setFiltersEnabled();
   setFilterEnabled(DEFAULT_FILTER);
   setScrollEnabled();
-  onPhotoClick();
 });
 
 filtersForm.classList.remove('hidden');
