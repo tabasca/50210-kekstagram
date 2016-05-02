@@ -28,7 +28,7 @@ module.exports = {
   },
 
   isEscEvent: function(evt) {
-    return evt.KeyCode === KeyCode.ESC;
+    return evt.keyCode === KeyCode.ESC;
   },
 
   isFileTypeAppropriate: function(element) {

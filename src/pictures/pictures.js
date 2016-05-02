@@ -111,6 +111,7 @@ var onPhotoClick = function() {
         }
       }
       gallery.showGallery(i);
+      evt.preventDefault();
     }
   });
 };
