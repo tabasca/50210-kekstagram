@@ -25,26 +25,24 @@ var Gallery = function() {
 
     window.addEventListener('keydown', this._onDocumentKeydown);
     galleryContainer.addEventListener('click', this._onCloseBtnClick);
-    galleryContainer.addEventListener('click', this._onPhotoClick(activePicture));
+    galleryContainer.addEventListener('click', this._onPhotoClick);
   };
 
-  this._onPhotoClick = function() {
-    galleryContainer.addEventListener('click', function(evt) {
-      if (evt.target.classList.contains('gallery-overlay-image')) {
-        activePicture++;
-        this.showPicture();
-      } else {
-        evt.preventDefault();
-        this.hideGallery();
-      }
-    });
+  this._onPhotoClick = function(evt) {
+    if (evt.target.classList.contains('gallery-overlay-image')) {
+      activePicture++;
+      self.showPicture();
+    } else {
+      evt.preventDefault();
+      self.hideGallery();
+    }
   };
 
   this._onCloseBtnClick = function(evt) {
     if (evt.target.classList.contains('gallery-overlay-close')) {
       closeGallery.addEventListener('click', function(evtt) {
         evtt.preventDefault();
-        this.hideGallery();
+        self.hideGallery();
       });
     } else {
       return;
@@ -54,7 +52,7 @@ var Gallery = function() {
   this._onDocumentKeydown = function(e) {
     if (utils.isEscEvent(e)) {
       e.preventDefault();
-      this.hideGallery();
+      self.hideGallery();
     }
   };
 
@@ -72,8 +70,8 @@ var Gallery = function() {
     galleryContainer.classList.add('invisible');
 
     galleryContainer.removeEventListener('click', this._onCloseBtnClick);
-    galleryContainer.removeEventListener('click', this._onPhotoClick(activePicture));
+    galleryContainer.removeEventListener('click', this._onPhotoClick);
   };
 };
 
-module.exports = Gallery;
+module.exports = new Gallery();

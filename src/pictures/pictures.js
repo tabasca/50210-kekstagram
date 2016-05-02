@@ -4,6 +4,7 @@ var filter = require('../filter/filter');
 var FilterType = require('../filter/filter-type');
 var utils = require('../utils');
 var Picture = require('./pic');
+var gallery = require('./gallery');
 var load = require('./load-pictures');
 
 
@@ -62,6 +63,7 @@ var renderNextPages = function(reset) {
 var setFilterEnabled = function(filterType) {
   filteredPictures = filter(pictures, filterType);
   renderNextPages(true);
+  gallery.gallery(filteredPictures);
 
   var activeFilter = filtersForm.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
   if (activeFilter) {
