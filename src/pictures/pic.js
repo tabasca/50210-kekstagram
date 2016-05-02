@@ -7,7 +7,7 @@ var picturesContainer = document.querySelector('.pictures');
 
 var Photo = function(data, container) {
   var pictureElement = getPictureElement(data, container);
-  var _onPhotoClick = function(evt) {
+  this._onPhotoClick = function(evt) {
     if (evt.target.src) {
       var element = evt.target;
       var elements = picturesContainer.querySelectorAll('img');
@@ -22,11 +22,11 @@ var Photo = function(data, container) {
   };
 
   this.remove = function() {
-    pictureElement.removeEventListener('click', _onPhotoClick);
+    pictureElement.removeEventListener('click', this._onPhotoClick);
     pictureElement.parentNode.removeChild(pictureElement);
   };
 
-  pictureElement.addEventListener('click', _onPhotoClick);
+  pictureElement.addEventListener('click', this._onPhotoClick);
   container.appendChild(pictureElement);
 };
 
