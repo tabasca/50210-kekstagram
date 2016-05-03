@@ -5,29 +5,30 @@ var getPictureElement = require('./get-picture-element');
 var picturesContainer = document.querySelector('.pictures');
 
 var Photo = function(data, container) {
-  var pictureElement = getPictureElement(data, container);
-  this._onPhotoClick = function(evt) {
-    if (evt.target.src) {
-      var element = evt.target;
-      var elements = picturesContainer.querySelectorAll('img');
-      for (var i in elements) {
-        if (elements[i] === element) {
-          break;
-        }
+  this.data = data;
+  this.pictureElement = getPictureElement(this.data, container);
+  this.pictureElement.addEventListener('click', this._onPhotoClick.bind(this));
+  container.appendChild(this.pictureElement);
+};
+
+Photo.prototype._onPhotoClick = function(evt) {
+  if (evt.target.src) {
+    this.element = evt.target;
+    this.elements = picturesContainer.querySelectorAll('img');
+    for (var i in this.elements) {
+      if (this.elements[i] === this.element) {
+        break;
       }
-      location.hash = 'photo/' + data.url;
-      evt.preventDefault();
     }
-  };
+    location.hash = 'photo/' + this.data.url;
+    evt.preventDefault();
+  }
+};
 
-  this.remove = function() {
-    location.hash = '';
-    pictureElement.removeEventListener('click', this._onPhotoClick);
-    pictureElement.parentNode.removeChild(pictureElement);
-  };
-
-  pictureElement.addEventListener('click', this._onPhotoClick);
-  container.appendChild(pictureElement);
+Photo.prototype.remove = function() {
+  location.hash = '';
+  this.pictureElement.removeEventListener('click', this._onPhotoClick);
+  this.pictureElement.parentNode.removeChild(this.pictureElement);
 };
 
 module.exports = Photo;
