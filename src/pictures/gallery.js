@@ -3,95 +3,101 @@
 var utils = require('../utils');
 
 var Gallery = function() {
-  var self = this;
+  this.galleryContainer = document.querySelector('.gallery-overlay');
+  this.closeGallery = this.galleryContainer.querySelector('.gallery-overlay-close');
+  this.previewPicture = this.galleryContainer.querySelector('.gallery-overlay-image');
+  this.galleryLikes = this.galleryContainer.querySelector('.likes-count');
+  this.galleryComments = this.galleryContainer.querySelector('.comments-count');
 
-  var galleryContainer = document.querySelector('.gallery-overlay');
-  var closeGallery = galleryContainer.querySelector('.gallery-overlay-close');
-  var previewPicture = galleryContainer.querySelector('.gallery-overlay-image');
-  var galleryLikes = galleryContainer.querySelector('.likes-count');
-  var galleryComments = galleryContainer.querySelector('.comments-count');
+  this.galleryPictures = [];
+  this.currentPictureNmbr = 0;
 
-  var galleryPictures = [];
-  var currentPictureNmbr = 0;
+  window.addEventListener('hashchange', this._onHashChange.bind(this));
+  this._onPhotoClick = this._onPhotoClick.bind(this);
+  this._onCloseBtnClick = this._onCloseBtnClick.bind(this);
+  this._onDocumentKeydown = this._onDocumentKeydown.bind(this);
+  this.showPicture = this.showPicture.bind(this);
+  this.hideGallery = this.hideGallery.bind(this);
+  this.showGallery = this.showGallery.bind(this);
+  this.gallery = this.gallery.bind(this);
+  this._onHashChange = this._onHashChange.bind(this);
+};
 
-  this.gallery = function(pictures) {
-    galleryPictures = pictures;
-  };
+Gallery.prototype.gallery = function(pictures) {
+  this.galleryPictures = pictures;
+};
 
-  this.showGallery = function(currentPictureHash) {
-    galleryContainer.classList.remove('invisible');
-    self.showPicture(currentPictureHash);
+Gallery.prototype.showGallery = function(currentPictureHash) {
+  this.galleryContainer.classList.remove('invisible');
+  this.showPicture(currentPictureHash);
 
-    window.addEventListener('keydown', this._onDocumentKeydown);
-    galleryContainer.addEventListener('click', this._onCloseBtnClick);
-    galleryContainer.addEventListener('click', this._onPhotoClick);
-  };
+  window.addEventListener('keydown', this._onDocumentKeydown);
+  this.galleryContainer.addEventListener('click', this._onCloseBtnClick);
+  this.galleryContainer.addEventListener('click', this._onPhotoClick);
+};
 
-  this._onPhotoClick = function(evt) {
-    if (evt.target.classList.contains('gallery-overlay-image') && currentPictureNmbr <= galleryPictures.length) {
-      currentPictureNmbr++;
-      location.hash = 'photo/' + galleryPictures[currentPictureNmbr].url;
-    } else {
-      evt.preventDefault();
-      self.hideGallery();
-    }
-  };
+Gallery.prototype._onPhotoClick = function(evt) {
+  if (evt.target.classList.contains('gallery-overlay-image') && this.currentPictureNmbr <= this.galleryPictures.length) {
+    this.currentPictureNmbr++;
+    location.hash = 'photo/' + this.galleryPictures[this.currentPictureNmbr].url;
+  } else {
+    evt.preventDefault();
+    this.hideGallery();
+  }
+};
 
-  this._onCloseBtnClick = function(evt) {
-    if (evt.target.classList.contains('gallery-overlay-close')) {
-      closeGallery.addEventListener('click', function(evtt) {
-        evtt.preventDefault();
-        self.hideGallery();
-      });
-    } else {
-      return;
-    }
-  };
+Gallery.prototype._onCloseBtnClick = function(evt) {
+  if (evt.target.classList.contains('gallery-overlay-close')) {
+    this.closeGallery.addEventListener('click', function(evtt) {
+      evtt.preventDefault();
+      this.hideGallery();
+    });
+  } else {
+    return;
+  }
+};
 
-  this._onDocumentKeydown = function(e) {
-    if (utils.isEscEvent(e)) {
-      e.preventDefault();
-      self.hideGallery();
-    }
-  };
+Gallery.prototype._onDocumentKeydown = function(e) {
+  if (utils.isEscEvent(e)) {
+    e.preventDefault();
+    this.hideGallery();
+  }
+};
 
-  this.showPicture = function(currentPictureHash) {
-    var currentPicture = galleryPictures[currentPictureNmbr];
+Gallery.prototype.showPicture = function(currentPictureHash) {
+  var currentPicture;
 
-    if (currentPictureHash) {
-      currentPicture = galleryPictures.find(function(picture) {
-        return currentPictureHash.indexOf(picture.url) !== -1;
-      });
-    } else {
-      currentPicture = galleryPictures[currentPictureNmbr];
-    }
-    currentPictureNmbr = galleryPictures.indexOf(currentPicture);
-    if (currentPicture) {
-      previewPicture.src = currentPicture.url;
-      galleryLikes.innerHTML = currentPicture.likes;
-      galleryComments.innerHTML = currentPicture.comments;
-    }
-  };
+  if (currentPictureHash) {
+    currentPicture = this.galleryPictures.find(function(picture) {
+      return currentPictureHash.indexOf(picture.url) !== -1;
+    });
+  } else {
+    currentPicture = this.galleryPictures[this.currentPictureNmbr];
+  }
+  this.currentPictureNmbr = this.galleryPictures.indexOf(currentPicture);
+  if (currentPicture) {
+    this.previewPicture.src = currentPicture.url;
+    this.galleryLikes.innerHTML = currentPicture.likes;
+    this.galleryComments.innerHTML = currentPicture.comments;
+  }
+};
 
-  this.hideGallery = function() {
-    location.hash = '';
-    galleryContainer.classList.add('invisible');
+Gallery.prototype.hideGallery = function() {
+  location.hash = '';
+  this.galleryContainer.classList.add('invisible');
 
-    galleryContainer.removeEventListener('click', this._onCloseBtnClick);
-    galleryContainer.removeEventListener('click', this._onPhotoClick);
-  };
+  this.galleryContainer.removeEventListener('click', this._onCloseBtnClick);
+  this.galleryContainer.removeEventListener('click', this._onPhotoClick);
+};
 
-  this._onHashChange = function() {
-    var currentHash = location.hash;
-    var hashRegExp = new RegExp(/#photo\/(\S+)/);
-    if (currentHash.match(hashRegExp)) {
-      self.showGallery(currentHash);
-    } else {
-      self.hideGallery();
-    }
-  };
-
-  window.addEventListener('hashchange', this._onHashChange);
+Gallery.prototype._onHashChange = function() {
+  this.currentHash = location.hash;
+  this.hashRegExp = new RegExp(/#photo\/(\S+)/);
+  if (this.currentHash.match(this.hashRegExp)) {
+    this.showGallery(this.currentHash);
+  } else {
+    this.hideGallery();
+  }
 };
 
 module.exports = new Gallery();
