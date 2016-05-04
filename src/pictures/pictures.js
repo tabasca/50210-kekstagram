@@ -68,21 +68,25 @@ var setFilterEnabled = function(filterType) {
   var activeFilter = filtersForm.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
   if (activeFilter) {
     activeFilter.classList.remove(ACTIVE_FILTER_CLASSNAME);
+    activeFilter.removeAttribute('checked');
   }
   var filterToActivate = document.getElementById(filterType);
   filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
+  filterToActivate.setAttribute('checked', 'checked');
 };
 
 // ф-я активации фильтрации по нажатию на выбранный фильтр
 var setFiltersEnabled = function() {
   filtersForm.addEventListener('click', function(evt) {
     if (evt.target.name === 'filter') {
+      localStorage.setItem('defaultFilter', evt.target.id);
       setFilterEnabled(evt.target.id);
     }
   });
   filtersForm.addEventListener('keydown', function(evt) {
     if (evt.target.name === 'filter' && utils.isActivationEvent(event)) {
       evt.preventDefault();
+      localStorage.setItem('defaultFilter', evt.target.id);
       setFilterEnabled(evt.target.id);
     }
   });
@@ -101,9 +105,11 @@ var setScrollEnabled = function() {
 
 load(PICTURES_LOAD_URL, picturesContainer, function(loadedPictures) {
   pictures = loadedPictures;
+  var defaultFilter = localStorage.getItem('defaultFilter');
+  defaultFilter = (defaultFilter !== '') ? defaultFilter : DEFAULT_FILTER;
 
   setFiltersEnabled();
-  setFilterEnabled(DEFAULT_FILTER);
+  setFilterEnabled(defaultFilter);
   setScrollEnabled();
 });
 
