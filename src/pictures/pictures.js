@@ -68,9 +68,11 @@ var setFilterEnabled = function(filterType) {
   var activeFilter = filtersForm.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
   if (activeFilter) {
     activeFilter.classList.remove(ACTIVE_FILTER_CLASSNAME);
+    activeFilter.removeAttribute('checked');
   }
   var filterToActivate = document.getElementById(filterType);
   filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
+  filterToActivate.setAttribute('checked', 'checked');
 };
 
 // ф-я активации фильтрации по нажатию на выбранный фильтр
