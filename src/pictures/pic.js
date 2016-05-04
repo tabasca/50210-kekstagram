@@ -1,7 +1,6 @@
 'use strict';
 
 var getPictureElement = require('./get-picture-element');
-var gallery = require('./gallery');
 
 var picturesContainer = document.querySelector('.pictures');
 
@@ -16,12 +15,13 @@ var Photo = function(data, container) {
           break;
         }
       }
-      gallery.showGallery(i);
+      location.hash = 'photo/' + data.url;
       evt.preventDefault();
     }
   };
 
   this.remove = function() {
+    location.hash = '';
     pictureElement.removeEventListener('click', this._onPhotoClick);
     pictureElement.parentNode.removeChild(pictureElement);
   };

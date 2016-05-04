@@ -107,10 +107,10 @@ load(PICTURES_LOAD_URL, picturesContainer, function(loadedPictures) {
   pictures = loadedPictures;
   var defaultFilter = localStorage.getItem('defaultFilter');
   defaultFilter = (defaultFilter !== '') ? defaultFilter : DEFAULT_FILTER;
-
   setFiltersEnabled();
   setFilterEnabled(defaultFilter);
   setScrollEnabled();
+  gallery._onHashChange();
 });
 
 filtersForm.classList.remove('hidden');
