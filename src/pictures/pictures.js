@@ -20,7 +20,7 @@ var DEFAULT_FILTER = FilterType.ALL;
 
 var ACTIVE_FILTER_CLASSNAME = 'filter-active';
 
-var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
+var PICTURES_LOAD_URL = '/pictures.json';
 
 var pictures = []; //исходные данные
 
@@ -106,7 +106,7 @@ var setScrollEnabled = function() {
 load(PICTURES_LOAD_URL, picturesContainer, function(loadedPictures) {
   pictures = loadedPictures;
   var defaultFilter = localStorage.getItem('defaultFilter');
-  defaultFilter = (defaultFilter !== '') ? defaultFilter : DEFAULT_FILTER;
+  defaultFilter = defaultFilter || DEFAULT_FILTER;
   setFiltersEnabled();
   setFilterEnabled(defaultFilter);
   setScrollEnabled();

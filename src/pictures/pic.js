@@ -20,7 +20,7 @@ Photo.prototype._onPhotoClick = function(evt) {
         break;
       }
     }
-    location.hash = 'photo/' + this.data.url;
+    location.hash = 'photo/' + this.data.id;
     evt.preventDefault();
   }
 };
